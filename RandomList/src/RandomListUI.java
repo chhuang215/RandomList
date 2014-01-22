@@ -167,8 +167,6 @@ public class RandomListUI extends JFrame{
 			RandomListUI frame = (RandomListUI)e.getWindow();
 			
 			try{		
-				/* Show the message on the title to tell the user that the program is closing */
-				frame.setTitle("Closing...");
 			
 				// Pause the program
 				Thread.sleep(750);
