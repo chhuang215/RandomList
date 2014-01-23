@@ -4,8 +4,6 @@ import java.util.Scanner;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -13,7 +11,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -25,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.Thread;
@@ -76,9 +72,10 @@ public class RandomListUI extends JFrame{
 		
 		layout = new GridBagLayout();
 		
-		//Set title/layout
+		//Set appearance
 		setTitle(TITLE);
 		setLayout(layout);
+		setResizable(false);
 		
 		addWindowListener(windowListener);
 		
@@ -108,28 +105,8 @@ public class RandomListUI extends JFrame{
 		
 		txtName = new JTextField();
 		txtName.setPreferredSize(new Dimension(125,28));
-		txtName.setFont(new Font("Arial",Font.PLAIN,12));
-		txtName.setText("Enter a name");
-		txtName.addActionListener(addListener);
-		txtName.addFocusListener(new FocusListener(){
-
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				txtName.setText(null);
-				txtName.setFont(new Font("Arial",Font.PLAIN,18));
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				txtName.setFont(new Font("Arial",Font.PLAIN,12));
-				txtName.setText("Enter a name");
-				
-			}
-			
-		});
-		
-		
-		
+		txtName.setFont(new Font("Arial",Font.PLAIN,18));
+		txtName.addActionListener(addListener);		
 
 		lstNames = new JList<String>(new DefaultListModel<String>());
 		lstNames.setFont(new Font("Arial",Font.PLAIN,18));
@@ -146,6 +123,9 @@ public class RandomListUI extends JFrame{
 		addWidget(btnPick, 3, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5,2,0,0));
 		addWidget(btnChamplist, 2, 4, 1, 1,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5,2,0,0));
 		addWidget(scrollPane, 0, 0, 2, 7, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0));
+		
+		setLocationRelativeTo(null);
+		
 	}
 	
 	public void addWidget(Component widget, int x, int y, int w, int h, int anchor, int fill, Insets inset){
@@ -328,15 +308,13 @@ public class RandomListUI extends JFrame{
 			try {
 				s = new Scanner (new File(LIST_FILE));		
 				
-			} catch (FileNotFoundException e1) {e1.printStackTrace();
-			}
+			} catch (FileNotFoundException e1) {e1.printStackTrace();}
 			
 			while(s.hasNext()){
 				String champ = s.nextLine();
 				people.add(champ);
 				numOfPeople++;
 			}
-			
 			
 			for(String champ : people){
 				dlm.addElement(champ);
