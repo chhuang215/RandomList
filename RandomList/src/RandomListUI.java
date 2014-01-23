@@ -34,7 +34,8 @@ import java.lang.Thread;
 public class RandomListUI extends JFrame{
 
 	public final String TITLE = "Random";
-
+	public final String LIST_FILE = "list";
+	
 	private ArrayList<String> people;
 	private int numOfPeople;	
 	
@@ -114,14 +115,12 @@ public class RandomListUI extends JFrame{
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				// TODO Auto-generated method stub
 				txtName.setText(null);
 				txtName.setFont(new Font("Arial",Font.PLAIN,18));
 			}
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				// TODO Auto-generated method stub
 				txtName.setFont(new Font("Arial",Font.PLAIN,12));
 				txtName.setText("Enter a name");
 				
@@ -327,7 +326,7 @@ public class RandomListUI extends JFrame{
 			numOfPeople = 0;
 			
 			try {
-				s = new Scanner (new File("listOfAllChamps"));		
+				s = new Scanner (new File(LIST_FILE));		
 				
 			} catch (FileNotFoundException e1) {e1.printStackTrace();
 			}
