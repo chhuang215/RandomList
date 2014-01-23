@@ -142,18 +142,7 @@ public class RandomListUI extends JFrame{
 	private class ExitListener extends WindowAdapter{
 
 		public void windowClosing(WindowEvent e){
-			
 			RandomListUI frame = (RandomListUI)e.getWindow();
-			
-			try{		
-			
-				// Pause the program
-				Thread.sleep(750);
-				
-			}catch(InterruptedException i){
-				i.printStackTrace();
-			};
-			
 			/* Terminates the program */
 			frame.setVisible(false);
 			frame.dispose();
@@ -308,7 +297,7 @@ public class RandomListUI extends JFrame{
 			try {
 				s = new Scanner (new File(LIST_FILE));		
 				
-			} catch (FileNotFoundException e1) {e1.printStackTrace();}
+			} catch (FileNotFoundException e1) {return;}
 			
 			while(s.hasNext()){
 				String champ = s.nextLine();
@@ -319,6 +308,7 @@ public class RandomListUI extends JFrame{
 			for(String champ : people){
 				dlm.addElement(champ);
 			}
+			s.close();
 		}
 	}
 }

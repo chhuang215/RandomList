@@ -1,7 +1,7 @@
 /**
  * Chih-Hsuan Huang
- * January 21, 2014 1012
- * Ver. 1.1 Final
+ * January 23, 2014 0156
+ * Ver. 1.2
  */
 
 public class RandomList{
