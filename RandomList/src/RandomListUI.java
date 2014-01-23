@@ -297,11 +297,10 @@ public class RandomListUI extends JFrame{
 			try {
 				s = new Scanner (new File(LIST_FILE));		
 				
-<<<<<<< HEAD
+
 			} catch (FileNotFoundException e1) {return;}
-=======
-			} catch (FileNotFoundException e1) {e1.printStackTrace();}
->>>>>>> branch 'master' of https://github.com/gemhuang21519992/RandomList.git
+
+
 			
 			while(s.hasNext()){
 				String champ = s.nextLine();
