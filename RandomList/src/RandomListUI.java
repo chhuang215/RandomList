@@ -298,7 +298,7 @@ public class RandomListUI extends JFrame{
 				s = new Scanner (new File(LIST_FILE));		
 				
 
-			} catch (FileNotFoundException e1) {return;}
+			} catch (FileNotFoundException i) {return;}
 
 
 			
