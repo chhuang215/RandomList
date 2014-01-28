@@ -11,6 +11,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+
+import javax.swing.AbstractAction;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -20,8 +23,10 @@ import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.DefaultListModel;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.Thread;
@@ -102,6 +107,7 @@ public class RandomListUI extends JFrame{
 	 
 		btnChamplist = new JButton("List of Champs");
 		btnChamplist.addActionListener(champListener);
+		btnChamplist.setVisible(false);
 		
 		txtName = new JTextField();
 		txtName.setPreferredSize(new Dimension(125,28));
@@ -110,7 +116,13 @@ public class RandomListUI extends JFrame{
 
 		lstNames = new JList<String>(new DefaultListModel<String>());
 		lstNames.setFont(new Font("Arial",Font.PLAIN,18));
-		lstNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		lstNames.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		InputMap inputMap = lstNames.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		inputMap.put(KeyStroke.getKeyStroke("DELETE"), "delete");
+		lstNames.getActionMap().put("delete", new AbstractAction(){
+			public void actionPerformed(ActionEvent e) { removeSeleted(); }
+		});
+		
 		JScrollPane scrollPane = new JScrollPane(lstNames);
 		scrollPane.setPreferredSize(new Dimension(300,250));
 		scrollPane.setMinimumSize(new Dimension(300,250));
@@ -132,11 +144,39 @@ public class RandomListUI extends JFrame{
 
 		/* 	Add the widget onto the frame depending on the grid bag layout */
 	
-		GridBagConstraints constraints = new GridBagConstraints(x, y, w, h, 0, 0, anchor, fill, inset , 0, 0);
+		GridBagConstraints constraints = new GridBagConstraints(x, y, w, h, 0, 0, anchor, fill, inset, 0, 0);
 
 		layout.setConstraints(widget, constraints);
 
 		add(widget);
+	}
+	
+	public void removeSeleted(){
+		// Get the model of the list
+		DefaultListModel<String> dlm = (DefaultListModel<String>)lstNames.getModel();		
+		
+		// Get the selected index for which the user have chosen
+		int selected[] = lstNames.getSelectedIndices();
+		
+		/* If a selection has been made, then remove the selection from the list*/
+		if(selected.length > 0){			
+			// Remove the contact from the list
+			for(int i = selected.length-1; i >= 0; i--){
+				int index = selected[i];
+				dlm.removeElementAt(index);
+				people.remove(index);
+				numOfPeople--;
+				
+				//Re-order if element removed is not the last element in the scroll list
+				if(index <= people.size()-1){
+					dlm.removeRange(index,(people.size()-1));
+					
+					for(int j = index; j < people.size(); j++){
+						dlm.addElement((j+1) + ". " + people.get(j));
+					}
+				}
+			}
+		}
 	}
 	
 	private class ExitListener extends WindowAdapter{
@@ -165,8 +205,12 @@ public class RandomListUI extends JFrame{
 			/* If the input is not empty, add the contact to the list*/
 			if(!input.equals(null) && !input.equals("")){
 				// Add the contact to the end of the list
-				people.add(input);
-				dlm.addElement(++numOfPeople + ". " + input);
+				if(input.equals("btnChamplist")){
+					btnChamplist.setVisible(true);					
+				}else{
+					people.add(input);
+					dlm.addElement(++numOfPeople + ". " + input);
+				}
 			}
 			
 			/* Pause the program for a moment*/
@@ -185,28 +229,7 @@ public class RandomListUI extends JFrame{
 	private class RemoveListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			
-			// Get the model of the list
-			DefaultListModel<String> dlm = (DefaultListModel<String>)lstNames.getModel();		
-			
-			// Get the selected index for which the user have chosen
-			int index = lstNames.getSelectedIndex();
-			
-			/* If a selection has been made, then remove the selection from the list*/
-			if(index != -1){			
-				// Remove the contact from the list
-				dlm.removeElementAt(index);
-				people.remove(index);
-				numOfPeople--;
-				
-				//Re-order if element removed is not the last element in the scroll list
-				if(index <= people.size()-1){
-					dlm.removeRange(index,(people.size()-1));
-					
-					for(int i = index; i < people.size(); i++){
-						dlm.addElement((i+1) + ". " + people.get(i));
-					}
-				}
-			}
+			removeSeleted();
 		}
 	}
 	
@@ -296,12 +319,10 @@ public class RandomListUI extends JFrame{
 			
 			try {
 				s = new Scanner (new File(LIST_FILE));		
-				
 
 			} catch (FileNotFoundException i) {return;}
 
 
-			
 			while(s.hasNext()){
 				String champ = s.nextLine();
 				people.add(champ);
