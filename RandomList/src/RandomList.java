@@ -8,7 +8,7 @@ public class RandomList{
 		
 	public static void main(String args[]){
 		RandomListUI f= new RandomListUI();
-		f.setSize(550,305);
+		f.setSize(550,340);
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 	}	
